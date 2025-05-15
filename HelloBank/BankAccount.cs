@@ -17,6 +17,7 @@ namespace HelloBank
                 decimal balance =0;
                 foreach (var item in _allTransactions)
                 {
+
                     balance += item.Amount;
                 }
                 return balance;
@@ -25,6 +26,10 @@ namespace HelloBank
 
         public BankAccount(string name, decimal initialBalance)
         {
+            if (initialBalance < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(initialBalance), "Ammount must be positive.");
+            }
             Number = s_accountNumberSeed.ToString();
             s_accountNumberSeed++;
 
@@ -45,11 +50,15 @@ namespace HelloBank
         }
         public void MakeWithdrawal(decimal amount, DateTime date, string note)
         {
+            if (amount < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(amount), "Ammount must be positive.");
+            }
             if (amount > Balance)
             {
                 throw new InvalidOperationException("Not sufficient funds for this withdrawal.");
             }
-            var withdrawal = new Transactions(amount, date, note);
+            var withdrawal = new Transactions(-amount, date, note);
             _allTransactions.Add(withdrawal);
         }
         public string GetAccountHistory()
