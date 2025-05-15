@@ -25,31 +25,34 @@
             Console.WriteLine("\t4. Exit");
             Console.Write("\tEnter your choice (1-4):\t");
 
-            int choice=0;
-            decimal amount = 0;
+            string choice="";
+            decimal amount;
 
-            while (choice != 4)
+            while (choice != "4")
             {
-                choice = Convert.ToInt16(Console.ReadLine());
+                
+                choice = Console.ReadLine();
                 switch (choice)
                 {
-                    case 1:
+                    case "1":
                         Console.Write("\tEnter the amount to deposit:\t");
                         amount = Convert.ToDecimal(Console.ReadLine());
                         account.MakeDeposit(amount, DateTime.Now, "Deposit");
+                        Console.WriteLine($"Your new balance {account.Balance}");
                         break;
 
-                    case 2:
+                    case "2":
                         Console.Write("\tEnter the amount to withdraw:\t");
                         amount = Convert.ToDecimal(Console.ReadLine());
                         account.MakeWithdrawal(amount, DateTime.Now, "Withdrawal");
+                        Console.WriteLine($"Your new balance {account.Balance}");
                         break;
-                    case 3:
+                    case "3":
                         Console.WriteLine("\tAccount History:");
                         Console.WriteLine(account.GetAccountHistory());
                         account.GetAccountHistory();
                         break;
-                    case 4:
+                    case "4":
                         Console.WriteLine("\tThank you for using Hello Bank. Goodbye!");
                         return;
                     default:
