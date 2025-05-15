@@ -4,40 +4,61 @@
     {
         static void Main(string[] args)
         {
-            var account = new BankAccount("Kacper", 1000);
-            Console.WriteLine($"Account {account.Number} was created for " +
-                $"{account.Owner} with {account.Balance} initial balance.");
+            Console.WriteLine("\t----------------------\t");
+            Console.WriteLine("\tWelcome to Hello Bank!\t");
+            Console.WriteLine("\t----------------------\t");
 
-            account.MakeWithdrawal(500, DateTime.Now, "Rent payment");
-            Console.WriteLine(account.Balance);
 
-            account.MakeDeposit(100, DateTime.Now, "Friend paid me back");
-            Console.WriteLine(account.Balance+ account.Number + account.Owner);
+            Console.Write("\tEnter your name:\t");
+            string Owner = Console.ReadLine();
 
-            // Test for a negative balance.
-            try
+            BankAccount account = new BankAccount(Owner, 1000);
+
+            Console.WriteLine($"\tHello {account.Owner}, your account number is {account.Number}.");
+            Console.WriteLine($"\tYour current balance is {account.Balance}.");
+            Console.WriteLine("\t----------------------\t");
+
+            Console.WriteLine("\tWhat would you like to do?");
+            Console.WriteLine("\t1. Deposit");
+            Console.WriteLine("\t2. Withdraw");
+            Console.WriteLine("\t3. View account history");
+            Console.WriteLine("\t4. Exit");
+            Console.Write("\tEnter your choice (1-4):\t");
+
+            int choice=0;
+            decimal amount = 0;
+
+            while (choice != 4)
             {
-                account.MakeWithdrawal(2050, DateTime.Now, "Attempt to overdraw");
-            }
-            catch (InvalidOperationException e)
-            {
-                Console.WriteLine("Exception caught trying to overdraw");
-                Console.WriteLine(e.ToString());
+                choice = Convert.ToInt16(Console.ReadLine());
+                switch (choice)
+                {
+                    case 1:
+                        Console.Write("\tEnter the amount to deposit:\t");
+                        amount = Convert.ToDecimal(Console.ReadLine());
+                        account.MakeDeposit(amount, DateTime.Now, "Deposit");
+                        break;
+
+                    case 2:
+                        Console.Write("\tEnter the amount to withdraw:\t");
+                        amount = Convert.ToDecimal(Console.ReadLine());
+                        account.MakeWithdrawal(amount, DateTime.Now, "Withdrawal");
+                        break;
+                    case 3:
+                        Console.WriteLine("\tAccount History:");
+                        Console.WriteLine(account.GetAccountHistory());
+                        account.GetAccountHistory();
+                        break;
+                    case 4:
+                        Console.WriteLine("\tThank you for using Hello Bank. Goodbye!");
+                        return;
+                    default:
+                        Console.WriteLine("\tInvalid choice. Please try again.");
+                        break;
+
+                }
             }
 
-            // Test that the initial balances must be positive.
-            BankAccount invalidAccount;
-            try
-            {
-                invalidAccount = new BankAccount("invalid", -55);
-            }
-            catch (ArgumentOutOfRangeException e)
-            {
-                Console.WriteLine("Exception caught creating account with negative balance");
-                Console.WriteLine(e.ToString());
-                
-            }
-            Console.WriteLine(account.GetAccountHistory());
         }
     }
 }
