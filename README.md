@@ -18,8 +18,7 @@ Przerób interaktywne lekcje „Tour of C#” 
 
 Zadanie: „Hello Bank” – konsolowa apka, która loguje transakcje w pamięci.
 
-Sprint 2: Typy i operatory
-Moduły  o zmiennych, stringach i liczbach 
+Sprint 2: Sprint 2 – nowości: record, LINQ, pattern-matching.
 
 .
 
