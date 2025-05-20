@@ -11,18 +11,7 @@ namespace HelloBank
         private static int s_accountNumberSeed = 1234567890;
         public string Number { get; }
         public string Owner { get; set; }
-        public decimal Balance 
-        { get
-            {
-                decimal balance =0;
-                foreach (var item in _allTransactions)
-                {
-
-                    balance += item.Amount;
-                }
-                return balance;
-            }
-        }
+        public decimal Balance => _allTransactions.Sum(t => t.Amount);
 
         public BankAccount(string name, decimal initialBalance)
         {
@@ -37,15 +26,15 @@ namespace HelloBank
             MakeDeposit(initialBalance, DateTime.Now, "Initial balance");
         }
 
-        private List<Transactions> _allTransactions = new List<Transactions>();
+        private List<Transaction> _allTransactions = new List<Transaction>();
 
         public void MakeDeposit(decimal amount, DateTime date, string note)
         {
-            if (amount <=0)
+            if (amount <0)
             {
                 throw new ArgumentOutOfRangeException(nameof(amount), "The deposit amount must be positive.");
             }
-            var deposit = new Transactions(amount, date, note);
+            var deposit = new Transaction(amount, date, note);
             _allTransactions.Add(deposit);
         }
         public void MakeWithdrawal(decimal amount, DateTime date, string note)
@@ -58,7 +47,7 @@ namespace HelloBank
             {
                 throw new InvalidOperationException("Not sufficient funds for this withdrawal.");
             }
-            var withdrawal = new Transactions(-amount, date, note);
+            var withdrawal = new Transaction(-amount, date, note);
             _allTransactions.Add(withdrawal);
         }
         public string GetAccountHistory()
