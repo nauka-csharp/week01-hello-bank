@@ -5,16 +5,27 @@ namespace HelloBank.Tests;
 public class BankAccountTests
 {
     [Fact]
-    public void Deposit_Increases_Balance()
+    public void Deposit_Increases_Balance_0()
     {
         // Arrange – przygotuj dane i obiekt
-        var acc = new BankAccount("Jan", 0m);
+        var acc = new BankAccount("Jan", 100m);
 
         // Act – wykonaj jedną akcję
-        acc.MakeDeposit(100m, DateTime.Now, "wpłata");
+        Action act = () => acc.MakeDeposit(0m, DateTime.Now, "wpłata");
 
         // Assert – sprawdź wynik
-        acc.Balance.Should().Be(100m);   // FluentAssertions
+        act.Should().Throw<ArgumentOutOfRangeException>();   // FluentAssertions
+    }
+    public void Deposit_Increases_Balance_Negative()
+    {
+        // Arrange – przygotuj dane i obiekt
+        var acc = new BankAccount("Jan", 100m);
+
+        // Act – wykonaj jedną akcję
+        Action act = ()=>acc.MakeDeposit(-1000m, DateTime.Now, "wpłata");
+
+        // Assert – sprawdź wynik
+        act.Should().Throw<ArgumentOutOfRangeException>();   // FluentAssertions
     }
     [Fact]
     public void Withdraw_Decreases_Balance()
@@ -35,5 +46,26 @@ public class BankAccountTests
         Action act = () => acc.MakeWithdrawal(200m, DateTime.Now, "wypłata");
         // Assert
         act.Should().Throw<InvalidOperationException>();
+    }
+
+    [Fact]
+    public void KindDeposit_Returns_DEPOSIT()
+    {
+        // Arrange
+        var t = new Transaction(150m, DateTime.UtcNow, "Wplata");
+        // Act
+        var kind = t.Kind;
+        // Assert
+        kind.Should().Be("DEPOSIT");
+    }
+    [Fact]
+    public void KindWithdrawal_Returns_WITHDRAWAL()
+    {
+        // Arrange
+        var t = new Transaction(-150m, DateTime.UtcNow, "Wplata");
+        // Act
+        var kind = t.Kind;
+        // Assert
+        kind.Should().Be("WITHDRAWAL");
     }
 }
