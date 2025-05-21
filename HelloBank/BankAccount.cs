@@ -17,20 +17,24 @@ namespace HelloBank
         {
             if (initialBalance < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(initialBalance), "Ammount must be positive.");
+                throw new ArgumentOutOfRangeException(nameof(initialBalance), "Amount must be positive.");
             }
             Number = s_accountNumberSeed.ToString();
             s_accountNumberSeed++;
 
             Owner = name;
-            MakeDeposit(initialBalance, DateTime.Now, "Initial balance");
+            if (initialBalance > 0)
+                MakeDeposit(initialBalance, DateTime.Now, "Initial balance");
+            else if(initialBalance == 0)
+                MakeDeposit(0, DateTime.Now, "Initial balance");
+
         }
 
         private List<Transaction> _allTransactions = new List<Transaction>();
 
         public void MakeDeposit(decimal amount, DateTime date, string note)
         {
-            if (amount <0)
+            if (amount <=0 && note != "Initial balance")
             {
                 throw new ArgumentOutOfRangeException(nameof(amount), "The deposit amount must be positive.");
             }
@@ -41,7 +45,7 @@ namespace HelloBank
         {
             if (amount < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(amount), "Ammount must be positive.");
+                throw new ArgumentOutOfRangeException(nameof(amount), "Amount must be positive.");
             }
             if (amount > Balance)
             {
@@ -59,7 +63,7 @@ namespace HelloBank
             foreach (var item in _allTransactions)
             {
                 balance += item.Amount;
-                report.AppendLine($"{item.Date.ToShortDateString()}\t{item.Amount}\t{balance}\t{item.Notes}");
+                report.AppendLine($"{item.Date.ToShortDateString()}\t{item.Amount}\t{balance}\t{item.Note}");
             }
 
             return report.ToString();
